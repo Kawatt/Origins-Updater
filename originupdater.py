@@ -692,7 +692,7 @@ def fix_icon(trace, origin):
     icon = origin["icon"]
     # Convert icon to object
     if isinstance(icon, str):
-        icon = {'icon': icon}
+        icon = {'item': icon}
     origin["icon"] = fix_item_stack(trace.copy(), icon)
     return origin
 
