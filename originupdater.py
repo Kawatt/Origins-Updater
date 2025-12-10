@@ -262,7 +262,7 @@ def fix_item_condition(trace, json_data):
             log("WARNING", trace, "Harvest levels don't exsist anymore.")
             log("ERROR", trace, "Fixing harvest level condition is unimplemented.")
         elif type == "origins:nbt":
-            json_data["type"] = "origins:custom_data",
+            json_data["type"] = "origins:custom_data"
             log("INFO", trace, "Renamed nbt item condition to custom_data")
             log("ERROR", trace, "Fixing nbt/custom_data condition is unimplemented.")
             #TODO: perhaps modify the nbt
@@ -610,19 +610,22 @@ def find_allowed_types(trace, allowed_types, field_data, meta_type = None):
 
 # Detects the type and iterates through that type's fields, fixing each
 def iterate_through_fields(trace, type, json_data, shape_data, meta_type = None):
-    shape = shape_data[type]
-    # Iterate through every field of the power definition
-    for field in shape:
-        # Check if the field is even in the actual power
-        # Could be done the other way around, but i dont want to parse non-existing fields
-        field_name = field["name"]
-        new_trace = trace.copy()
-        if field_name in json_data:
-            new_trace["fields"] = new_trace["fields"] + "." + field_name
-            field_data = json_data[field_name]
-            # Check what types are allowed for the field
-            field_data = find_allowed_types(new_trace.copy(), field["type"], field_data, meta_type)
-            json_data[field_name] = field_data
+    if type in shape_data:
+        shape = shape_data[type]
+        # Iterate through every field of the power definition
+        for field in shape:
+            # Check if the field is even in the actual power
+            # Could be done the other way around, but i dont want to parse non-existing fields
+            field_name = field["name"]
+            new_trace = trace.copy()
+            if field_name in json_data:
+                new_trace["fields"] = new_trace["fields"] + "." + field_name
+                field_data = json_data[field_name]
+                # Check what types are allowed for the field
+                field_data = find_allowed_types(new_trace.copy(), field["type"], field_data, meta_type)
+                json_data[field_name] = field_data
+    else:
+        log("ERROR", trace, "Field " + type + " does not exist or belongs to an addon.")
 
 def fix_power(trace, json_data):
     log("INFO", trace, "Fixing power")
