@@ -664,10 +664,16 @@ def update_powers(trace, folder_path):
     _, files = get_items_from_all_folders(folder_path)
     for file in files:
         trace["file"] = file
-        json_data = read_json_file(file)
+
+        try:
+            json_data = read_json_file(file)
+        except Exception as e:
+            print(f"Error reading '{file}': {e}. Skipping file.")
+            continue
 
         type = get_type(json_data)
         trace["fields"] = ""
+        
         if type == "origins:multiple":
             shape = docpowers.powers[type]
             for field_name in json_data:
@@ -703,7 +709,11 @@ def update_origins(trace, folder_path):
     _, files = get_items_from_all_folders(folder_path)
     for file in files:
         trace["file"] = file
-        origin = read_json_file(file)
+        try:
+            origin = read_json_file(file)
+        except Exception as e:
+            print(f"Error reading '{file}': {e}. Skipping file.")
+            continue
         origin = fix_icon(trace.copy(), origin)
         write_json_file(file, origin)
 
