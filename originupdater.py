@@ -99,7 +99,7 @@ def get_type(json_data):
     type = json_data["type"]
 
     if type.startswith("apoli:"):
-        type.replace("apoli:", "origins:", 1)
+        type = type.replace("apoli:", "origins:", 1)
     
     return type
 
