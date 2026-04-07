@@ -554,7 +554,6 @@ def fix_particle_effect(trace, json_data):
             json_data["params"] = new_params
             log("INFO", trace, f'Updated params for "{json_data["type"]}" particle.')
 
-
 def select_type(trace, type, field_data, meta_type = None):
     if type == "Entity Action Type" and is_json_object(field_data):
         fix_entity_action(trace.copy(), field_data)
@@ -594,6 +593,8 @@ def select_type(trace, type, field_data, meta_type = None):
         select_type(trace, meta_type + " Action Type", field_data)
     if type == "Condition Type" and is_json_object(field_data):
         select_type(trace, meta_type + " Condition Type", field_data)
+    if type == "Object" and is_json_object(field_data):
+        select_type(trace, meta_type + " Action Type", field_data["element"])
 
 
 # Its given a list of dicts that indicate if the field is an array and what type it is
