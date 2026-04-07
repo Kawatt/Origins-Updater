@@ -160,6 +160,8 @@ def fix_entity_action(trace, json_data):
             log("INFO", trace, "Updated action spawn effect cloud to use components")
         if type == "origins:damage":
             fix_damage(trace, type, json_data)
+        if type == "origins:feed":
+            json_data = rename_key(json_data, "food", "nutrition")
 
 def fix_bientity_action(trace, json_data):
     type = get_type(json_data)
