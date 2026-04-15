@@ -596,9 +596,21 @@ def select_type(trace, type, field_data, meta_type = None):
     if type == "Condition Type" and is_json_object(field_data):
         select_type(trace, meta_type + " Condition Type", field_data)
     if type == "Object" and is_json_object(field_data):
-        new_trace = trace.copy()   
-        new_trace["fields"] = new_trace["fields"] + ".element"
-        select_type(new_trace, meta_type + " Action Type", field_data["element"])
+        # Choice
+        if "element" in field_data: 
+            new_trace = trace.copy()   
+            new_trace["fields"] = new_trace["fields"] + ".element"
+            select_type(new_trace, meta_type + " Action Type", field_data["element"])
+        # If else list
+        if "condition" in field_data: 
+            new_trace = trace.copy()   
+            new_trace["fields"] = new_trace["fields"] + ".condition"
+            select_type(new_trace, meta_type + " Action Type", field_data["condition"])
+        if "action" in field_data: 
+            new_trace = trace.copy()   
+            new_trace["fields"] = new_trace["fields"] + ".action"
+            select_type(new_trace, meta_type + " Action Type", field_data["action"])
+        # if theres something else imma cry
 
 
 # Its given a list of dicts that indicate if the field is an array and what type it is
